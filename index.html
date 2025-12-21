@@ -2,30 +2,57 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merry Christmas</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access Panel</title>
 
-    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="styles/index.css">
 </head>
 
 <body>
-    <header>
 
-    </header>
-    <main>
-        <h1>Testing, testing.</h1>
-        <div class="evidencePanel">
-            <div class="panelHeader">
-                <h2>EVIDENCE PANEL</h2>
+    <div class="panel" id="panel">
+        <h1>Access Panel</h1>
+        <p id="instruction">Evidence required for authorization.</p>
+
+        <div class="evidence-list">
+            <div class="evidence-slot" data-slot="1">
+                <span>Evidence Slot 1</span>
+                <span class="slot-status">LOCKED</span>
+            </div>
+
+            <div class="evidence-slot" data-slot="2">
+                <span>Evidence Slot 2</span>
+                <span class="slot-status">LOCKED</span>
+            </div>
+
+            <div class="evidence-slot" data-slot="3">
+                <span>Evidence Slot 3</span>
+                <span class="slot-status">LOCKED</span>
             </div>
         </div>
 
-    </main>
-    <footer>
+        <div class="input-group">
+            <label for="code">Authorization Code</label>
+            <input id="code" type="text" placeholder="Enter authorization code" autocomplete="off">
+        </div>
 
-    </footer>
+        <div class="status" id="status">
+            Status: Awaiting input
+        </div>
+    </div>
+
+    <audio id="audio-stage-1" src="audio/ambient-static.mp3" preload="auto"></audio>
+    <audio id="audio-stage-2" src="audio/distant-knock.mp3" preload="auto"></audio>
+    <audio id="audio-stage-3" src="audio/whisper-breath.mp3" preload="auto"></audio>
+
+    <script src="scripts/app.js"></script>
 </body>
 
 </html>

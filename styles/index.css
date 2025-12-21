@@ -1,10 +1,232 @@
+/* --- VARIABLES --- */
+
 :root {
-    --dark-background: #0F1113;
-    --graphite-panel-background: #171A1D;
-    --offwhite-primary-text: #D6D7D9;
-    --light-grey-secondary-text: #9AA0A6;
-    --dark-divider-lines: #2A2F33;
-    --inactive-indicators: #3A3F44;
-    --red-error-accent: #7C2D2D;
-    --active-input-blue-grey: #8FA3B8;
+    --bg-main: #0F1113;
+    --bg-panel: #171A1D;
+    --border-subtle: #2A2F33;
+    --border-input: #3A3F44;
+    --text-primary: #D6D7D9;
+    --text-secondary: #9AA0A6;
+    --text-muted: #6F767D;
+    --accent-caret: #8FA3B8;
+    --verified: #8FA3B8;
+}
+
+/* --- BASE --- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Inter", sans-serif;
+    color: var(--text-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- BACKGROUND ATMOSPHERE --- */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%,
+            #14181c,
+            #0F1113 70%);
+    opacity: 0;
+    transition: opacity 2s ease;
+    pointer-events: none;
+}
+
+/* --- PANEL --- */
+
+.panel {
+    width: 100%;
+    max-width: 400px;
+    padding: 32px;
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    transition: border-color 0.6s ease, transform 0.6s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- STAGE 1 --- */
+
+.panel.stage-1 {
+    border-color: #3A3F44;
+    animation: breathe 12s ease-in-out infinite;
+}
+
+.panel.stage-1~body::before,
+body.stage-1::before {
+    opacity: 1;
+}
+
+/* --- STAGE 2 --- */
+
+.panel.stage-2 h1,
+.panel.stage-2 p,
+.panel.stage-2 .status {
+    font-family: "Libre Baskerville", serif;
+}
+
+.panel.stage-2 p,
+.panel.stage-2 .status {
+    animation: textDrift 9s infinite alternate;
+}
+
+/* --- STAGE 3 --- */
+
+.panel.stage-3 {
+    transform: translateY(2px) skewX(-0.3deg);
+}
+
+.panel.stage-3::after {
+    content: "";
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle,
+            transparent 60%,
+            rgba(0, 0, 0, 0.5));
+    pointer-events: none;
+}
+
+.panel.stage-3 h1,
+.panel.stage-3 p {
+    font-family: "Cormorant Garamond", serif;
+    letter-spacing: 0.04em;
+}
+
+.panel.stage-3 .status {
+    font-style: italic;
+}
+
+/* --- TEXT --- */
+
+h1 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+p {
+    margin: 0 0 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* --- EVIDENCE --- */
+
+.evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.evidence-slot {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid var(--border-subtle);
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: border-color 0.4s ease, color 0.4s ease;
+}
+
+.evidence-slot.verified {
+    border-color: var(--verified);
+    color: var(--text-primary);
+}
+
+.evidence-slot .slot-status {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+/* --- INPUT --- */
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-input);
+    color: var(--text-primary);
+}
+
+input:focus {
+    border-color: var(--accent-caret);
+    outline: none;
+}
+
+/* --- STATUS --- */
+
+.status {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+/* --- FLICKER --- */
+
+.panel.stage-2 .evidence-slot {
+    animation: flicker 8s infinite;
+}
+
+.panel.stage-3 .evidence-slot {
+    animation: flicker 4s infinite;
+}
+
+/* --- ANIMATIONS --- */
+
+@keyframes flicker {
+
+    0%,
+    93%,
+    100% {
+        border-color: var(--border-subtle);
+    }
+
+    97% {
+        border-color: #3F4A52;
+    }
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 18px rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes textDrift {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(0.5px);
+    }
 }
