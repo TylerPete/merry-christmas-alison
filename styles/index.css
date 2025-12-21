@@ -1,4 +1,10 @@
 :root {
     --dark-background: #0F1113;
-
+    --graphite-panel-background: #171A1D;
+    --offwhite-primary-text: #D6D7D9;
+    --light-grey-secondary-text: #9AA0A6;
+    --dark-divider-lines: #2A2F33;
+    --inactive-indicators: #3A3F44;
+    --red-error-accent: #7C2D2D;
+    --active-input-blue-grey: #8FA3B8;
 }
