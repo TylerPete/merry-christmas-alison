@@ -6,17 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Access Panel</title>
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap"
         rel="stylesheet">
 
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="styles/index.css">
 </head>
 
 <body>
 
+    <!-- ========================= -->
+    <!-- INVESTIGATION PANEL (CORE) -->
+    <!-- ========================= -->
+    <!-- DO NOT REMOVE OR RENAME -->
     <div class="panel" id="panel">
         <h1>Access Panel</h1>
         <p id="instruction">Evidence required for authorization.</p>
@@ -48,11 +54,38 @@
         </div>
     </div>
 
+    <!-- ========================= -->
+    <!-- AUDIO ELEMENTS -->
+    <!-- ========================= -->
+    <!-- Investigation / progression audio -->
     <audio id="audio-stage-1" src="audio/ambient-static.mp3" preload="auto"></audio>
     <audio id="audio-stage-2" src="audio/distant-knock.mp3" preload="auto"></audio>
     <audio id="audio-stage-3" src="audio/whisper-breath.mp3" preload="auto"></audio>
+    <audio id="audio-planchette" src="audio/wood-slide.mp3" preload="auto"></audio>
 
+    <!-- Ouija ambience (used only after stage 3) -->
+    <audio id="audio-ouija" src="audio/creepy-ambient-background.mp3" preload="auto" loop></audio>
+
+    <!-- ========================= -->
+    <!-- OUIJA SCENE (HIDDEN LAYER) -->
+    <!-- ========================= -->
+    <!-- This is additive and inert until JS activates it -->
+    <section id="ouija-scene" aria-hidden="true">
+        <div id="ouija-board-wrapper">
+            <img src="images/board.svg" id="ouija-board" alt="">
+            <img src="images/planchette-outline.png" id="planchette" alt="">
+        </div>
+    </section>
+
+    <!-- Blackout overlay for transition -->
+    <div id="blackout" aria-hidden="true"></div>
+
+    <!-- ========================= -->
+    <!-- APPLICATION SCRIPT -->
+    <!-- ========================= -->
+    <!-- IMPORTANT: loaded last so DOM exists -->
     <script src="scripts/app.js"></script>
+
 </body>
 
 </html>

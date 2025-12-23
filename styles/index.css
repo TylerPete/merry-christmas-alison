@@ -230,3 +230,139 @@ input:focus {
         transform: translateX(0.5px);
     }
 }
+
+
+/* ========================= */
+/* OUIJA SCENE (HIDDEN BY DEFAULT) */
+/* ========================= */
+
+#ouija-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(circle at center,
+            rgba(15, 17, 19, 0.9),
+            rgba(15, 17, 19, 1));
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 2.5s ease;
+}
+
+/* Board */
+#ouija-board {
+    width: min(90vw, 600px);
+    height: auto;
+    opacity: 0.85;
+}
+
+/* Planchette */
+#planchette {
+    position: absolute;
+    width: 160px;
+    height: auto;
+    opacity: 0.9;
+}
+
+
+/* ========================= */
+/* OUIJA ACTIVATION STATE */
+/* ========================= */
+
+body.ouija-active #ouija-scene {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Fade the investigation panel away */
+body.ouija-active .panel {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.97);
+    transition: opacity 1.8s ease, transform 1.8s ease;
+}
+
+/* Slight ambient darkening */
+body.ouija-active::before {
+    opacity: 1;
+}
+
+
+/* ========================= */
+/* OUIJA SCENE — LOCKED SCALE */
+/* ========================= */
+
+#ouija-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(circle at center,
+            rgba(15, 17, 19, 0.9),
+            rgba(15, 17, 19, 1));
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2.5s ease;
+}
+
+/* Board wrapper establishes scaling context */
+#ouija-board-wrapper {
+    position: relative;
+    width: min(90vw, 600px);
+}
+
+/* Board defines size */
+#ouija-board {
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0.85;
+}
+
+/* Planchette scales RELATIVE to board */
+#planchette {
+    position: absolute;
+
+    /* 🔒 Constant proportion to board */
+    width: 22%;
+    height: auto;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%) rotate(var(--rot, 0deg)) translate(var(--jx, 0px), var(--jy, 0px));
+
+    transition:
+        left 2.5s ease-in-out,
+        top 2.5s ease-in-out,
+        transform 2.5s ease-in-out;
+
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* Activate Ouija scene */
+body.ouija-active #ouija-scene {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Fade panel away */
+body.ouija-active .panel {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.98);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+}

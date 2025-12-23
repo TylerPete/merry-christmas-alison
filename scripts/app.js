@@ -13,6 +13,42 @@ const slots = document.querySelectorAll(".evidence-slot");
 const audioStage1 = document.getElementById("audio-stage-1");
 const audioStage2 = document.getElementById("audio-stage-2");
 const audioStage3 = document.getElementById("audio-stage-3");
+const audioPlanchette = document.getElementById("audio-planchette");
+
+
+if (audioStage1) audioStage1.volume = 0.03; // static (very quiet)
+if (audioStage2) audioStage2.volume = 0.03; // door knock
+if (audioStage3) audioStage3.volume = 0.10; // whisper/breath
+
+let audioUnlocked = false;
+
+function unlockAudioOnce() {
+    if (audioUnlocked) return;
+
+    const audios = [
+        audioStage1,
+        audioStage2,
+        audioStage3,
+        audioPlanchette
+    ];
+
+    audios.forEach(audio => {
+        if (!audio) return;
+
+        audio.volume = 0;
+        audio.play()
+            .then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = 0.30;
+            })
+            .catch(() => { });
+    });
+
+    audioUnlocked = true;
+
+    console.log("🔊 Audio unlocked");
+}
 
 /* --- STORAGE KEYS --- */
 
@@ -25,6 +61,8 @@ let progress = 0;
 let verifiedCodes = [];
 
 /* --- AUDIO HELPERS --- */
+
+let planchetteFadeTimeout = null;
 
 function playRandomly(audio, minDelay, maxDelay) {
     if (!audio) return;
@@ -44,6 +82,47 @@ function playRandomly(audio, minDelay, maxDelay) {
 
     schedule();
 }
+
+function startPlanchetteSound(duration) {
+    if (!audioPlanchette) return;
+
+    // Create a brand-new audio instance every time
+    const sound = audioPlanchette.cloneNode(true);
+
+    sound.volume = 0.35;
+    sound.currentTime = Math.random() * 0.12;
+
+    console.log("▶️ Planchette sound playing");
+    sound.play().catch(() => { });
+
+    // Fade out near the end of movement
+    const fadeTime = 300;
+    setTimeout(() => {
+        const step = sound.volume / (fadeTime / 50);
+        const fade = setInterval(() => {
+            sound.volume = Math.max(0, sound.volume - step);
+            if (sound.volume <= 0.02) {
+                sound.pause();
+                clearInterval(fade);
+            }
+        }, 50);
+    }, Math.max(0, duration - fadeTime));
+}
+
+
+function fadeOutAudio(audio, fadeTime = 400) {
+    const step = audio.volume / (fadeTime / 50);
+
+    const fade = setInterval(() => {
+        audio.volume = Math.max(0, audio.volume - step);
+        if (audio.volume <= 0.02) {
+            audio.pause();
+            audio.volume = 0.35;
+            clearInterval(fade);
+        }
+    }, 50);
+}
+
 
 /* --- STORAGE --- */
 
@@ -97,6 +176,9 @@ function restoreUI() {
     if (progress >= 3) {
         panel.classList.add("stage-3");
         document.body.classList.add("stage-3");
+        document.body.classList.add("ouija-active");
+        loopOuijaPath(TEST_OUIJA_PATH);
+
         instruction.textContent =
             "Primary evidence complete. Secondary analysis required.";
         status.textContent =
@@ -162,6 +244,11 @@ input.addEventListener("keydown", (e) => {
     if (progress === 3) {
         panel.classList.add("stage-3");
         document.body.classList.add("stage-3");
+        setTimeout(() => {
+            document.body.classList.add("ouija-active");
+            loopOuijaPath(TEST_OUIJA_PATH);
+        }, 2500);
+
         instruction.textContent =
             "Primary evidence complete. Secondary analysis required.";
         status.textContent =
@@ -176,7 +263,133 @@ input.addEventListener("keydown", (e) => {
     }
 });
 
+/* ========================= */
+/* OUIJA PLANCHETTE ENGINE */
+/* ========================= */
+
+const planchette = document.getElementById("planchette");
+
+/**
+ * Move planchette to a normalized board position.
+ * x, y = percentages (0–100)
+ * rotation = degrees
+ * duration = milliseconds
+ */
+function movePlanchette(x, y, rotation = 0, duration = 2500) {
+    if (!planchette) return;
+
+    planchette.style.transitionDuration = `${duration}ms`;
+    planchette.style.left = `${x}%`;
+    planchette.style.top = `${y}%`;
+    planchette.style.setProperty("--rot", `${rotation}deg`);
+
+}
+
+/**
+ * Promise-based delay helper
+ */
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
+// /* ========================= */
+// /* PLANCHETTE MICRO JITTER */
+// /* ========================= */
+
+// let jitterInterval = null;
+
+// function startMicroJitter(element) {
+//     if (jitterInterval) return;
+
+//     let offsetX = 0;
+//     let offsetY = 0;
+
+//     // Disable smoothing so jitter is visible
+//     element.style.setProperty("--transform-time", "0ms");
+
+//     jitterInterval = setInterval(() => {
+//         offsetX += (Math.random() - 0.5) * 5;
+//         offsetY += (Math.random() - 0.5) * 5;
+
+//         offsetX = Math.max(-3, Math.min(3, offsetX));
+//         offsetY = Math.max(-3, Math.min(3, offsetY));
+
+//         element.style.setProperty("--jx", `${offsetX}px`);
+//         element.style.setProperty("--jy", `${offsetY}px`);
+//     }, 80);
+// }
+
+
+// function stopMicroJitter(element) {
+//     clearInterval(jitterInterval);
+//     jitterInterval = null;
+
+//     element.style.setProperty("--jx", "0px");
+//     element.style.setProperty("--jy", "0px");
+
+//     // Restore smooth motion
+//     element.style.setProperty("--transform-time", "2.5s");
+// }
+
+
+
+/**
+ * Runs a sequence of planchette movements
+ * Path format:
+ * { x, y, rotate, pause }
+ */
+async function runOuijaPath(path) {
+    for (const step of path) {
+        const duration = step.duration || 2500;
+
+        movePlanchette(
+            step.x,
+            step.y,
+            step.rotate || 0,
+            duration
+        );
+
+        // 🔊 START SOUND EXACTLY WITH MOTION
+        startPlanchetteSound(duration);
+
+        // Movement time (no jitter)
+        await wait(duration);
+
+    }
+}
+
+/* ========================= */
+/* OUIJA LOOP CONTROLLER */
+/* ========================= */
+
+async function loopOuijaPath(path, endPause = 4000) {
+    while (true) {
+        await runOuijaPath(path);
+        await wait(endPause);
+    }
+}
+
+
+/* ========================= */
+/* TEST PATH (SAFE TO EDIT) */
+/* ========================= */
+
+const TEST_OUIJA_PATH = [
+    { x: 50, y: 30, rotate: 0, pause: 800 },
+    { x: 65, y: 45, rotate: 6, pause: 800 },
+    { x: 55, y: 60, rotate: -4, pause: 800 },
+    { x: 40, y: 55, rotate: 3, pause: 800 },
+    { x: 50, y: 70, rotate: 0, pause: 1200 }
+];
+
+
 /* --- INIT --- */
+
+["pointerdown", "touchstart", "mousedown", "keydown"].forEach(event => {
+    window.addEventListener(event, unlockAudioOnce, { once: true });
+});
 
 loadState();
 restoreUI();
