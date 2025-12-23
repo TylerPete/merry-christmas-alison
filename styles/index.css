@@ -62,7 +62,7 @@ body::before {
 
 .panel.stage-1 {
     border-color: #3A3F44;
-    animation: breathe 12s ease-in-out infinite;
+    animation: breathe 5s ease-in-out infinite;
 }
 
 .panel.stage-1~body::before,
@@ -217,7 +217,7 @@ input:focus {
     }
 
     50% {
-        box-shadow: 0 0 18px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 1);
     }
 }
 
