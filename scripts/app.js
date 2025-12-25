@@ -8,6 +8,9 @@ const panel = document.getElementById("panel");
 const instruction = document.getElementById("instruction");
 const slots = document.querySelectorAll(".evidence-slot");
 
+const finalInput = document.getElementById("final-code");
+const finalReveal = document.getElementById("final-reveal");
+
 /* --- AUDIO (OPTIONAL / SAFE) --- */
 
 const audioStage1 = document.getElementById("audio-stage-1");
@@ -263,6 +266,22 @@ input.addEventListener("keydown", (e) => {
     }
 });
 
+
+finalInput.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+
+    const value = finalInput.value.trim().toUpperCase();
+
+    if (value !== "REVEAL") {
+        finalInput.value = "";
+        return;
+    }
+
+    triggerFinalReveal();
+});
+
+
+
 /* ========================= */
 /* OUIJA PLANCHETTE ENGINE */
 /* ========================= */
@@ -372,16 +391,31 @@ async function loopOuijaPath(path, endPause = 4000) {
 }
 
 
+function triggerFinalReveal() {
+    console.log("✨ Final reveal unlocked");
+
+    // Stop Ouija motion if you want
+    // (optional — loopOuijaPath runs forever otherwise)
+    // location.reload(); OR add a stop flag if desired
+
+    document.body.classList.add("reveal-active");
+
+    // Hide Ouija input
+    finalInput.blur();
+}
+
+
+
 /* ========================= */
 /* TEST PATH (SAFE TO EDIT) */
 /* ========================= */
 
 const TEST_OUIJA_PATH = [
-    { x: 50, y: 30, rotate: 0, pause: 800 },
-    { x: 65, y: 45, rotate: 6, pause: 800 },
-    { x: 55, y: 60, rotate: -4, pause: 800 },
-    { x: 40, y: 55, rotate: 3, pause: 800 },
-    { x: 50, y: 70, rotate: 0, pause: 1200 }
+    { x: 38, y: 62, rotate: 0, pause: 800 },
+    { x: 41, y: 44, rotate: 0, pause: 800 },
+    { x: 64, y: 58, rotate: 0, pause: 800 },
+    { x: 14, y: 53, rotate: 0, pause: 800 },
+    { x: 70, y: 49, rotate: 0, pause: 1200 }
 ];
 
 
