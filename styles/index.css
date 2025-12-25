@@ -412,6 +412,20 @@ body.ouija-active #final-input {
     pointer-events: auto;
 }
 
+#final-status {
+    margin-top: 6px;
+    font-size: 11px;
+    text-align: center;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+#final-status.visible {
+    opacity: 1;
+}
+
 
 /* ========================= */
 /* FINAL REVEAL SCREEN */
