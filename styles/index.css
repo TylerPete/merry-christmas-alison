@@ -374,7 +374,7 @@ body.ouija-active .panel {
 
 #final-input {
     position: fixed;
-    bottom: 10%;
+    bottom: 8%;
     left: 50%;
     transform: translateX(-50%);
 
