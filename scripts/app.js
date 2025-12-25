@@ -2,6 +2,7 @@ console.log("app.js loaded");
 
 /* --- DOM --- */
 
+const finalStatus = document.getElementById("final-status");
 const input = document.getElementById("code");
 const status = document.getElementById("status");
 const panel = document.getElementById("panel");
@@ -20,8 +21,8 @@ const audioPlanchette = document.getElementById("audio-planchette");
 
 
 if (audioStage1) audioStage1.volume = 0.03; // static (very quiet)
-if (audioStage2) audioStage2.volume = 0.03; // door knock
-if (audioStage3) audioStage3.volume = 0.10; // whisper/breath
+if (audioStage2) audioStage2.volume = 0.02; // door knock
+if (audioStage3) audioStage3.volume = 0.06; // whisper/breath
 
 let audioUnlocked = false;
 
@@ -38,7 +39,7 @@ function unlockAudioOnce() {
     audios.forEach(audio => {
         if (!audio) return;
 
-        audio.volume = 0;
+        audio.volume = 0.01;
         audio.play()
             .then(() => {
                 audio.pause();
@@ -271,9 +272,17 @@ finalInput.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
 
     const value = finalInput.value.trim().toUpperCase();
+    finalInput.value = "";
 
     if (value !== "REVEAL") {
-        finalInput.value = "";
+        finalStatus.textContent = "The message is unclear.";
+        finalStatus.classList.add("visible");
+
+        // Fade the message away after a moment
+        setTimeout(() => {
+            finalStatus.classList.remove("visible");
+        }, 2500);
+
         return;
     }
 
