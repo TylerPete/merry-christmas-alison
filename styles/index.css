@@ -342,7 +342,7 @@ body.ouija-active::before {
     top: 50%;
 
     transform:
-        translate(-50%, -50%) rotate(var(--rot, 0deg)) translate(var(--jx, 0px), var(--jy, 0px));
+        translate(-50%, -45%) rotate(var(--rot, 0deg)) translate(var(--jx, 0px), var(--jy, 0px));
 
     transition:
         left 2.5s ease-in-out,
@@ -365,4 +365,107 @@ body.ouija-active .panel {
     pointer-events: none;
     transform: scale(0.98);
     transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+
+/* ========================= */
+/* FINAL INPUT (OUija Phase) */
+/* ========================= */
+
+#final-input {
+    position: fixed;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 1.5s ease;
+    z-index: 20;
+}
+
+#final-input label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+#final-input input {
+    background: rgba(15, 17, 19, 0.85);
+    border: 1px solid var(--border-subtle);
+    padding: 10px 14px;
+    color: var(--text-primary);
+    width: 220px;
+    text-align: center;
+}
+
+/* Show input only during Ouija phase */
+body.ouija-active #final-input {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+/* ========================= */
+/* FINAL REVEAL SCREEN */
+/* ========================= */
+
+#final-reveal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(circle,
+            #14181c,
+            #0F1113 75%);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 2.5s ease;
+}
+
+#final-reveal .reveal-content {
+    text-align: center;
+    max-width: 400px;
+    animation: revealFade 3s ease forwards;
+}
+
+#final-reveal h1 {
+    font-family: "Cormorant Garamond", serif;
+    letter-spacing: 0.25em;
+    margin-bottom: 12px;
+}
+
+#final-reveal p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+body.reveal-active #final-reveal {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@keyframes revealFade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
